@@ -22,7 +22,9 @@ const ProductDetailPage = () => {
   const dispatch = useAppDispatch()
   const { user } = useUser()
   const { productId, variantId } = location?.state || {}
-  const { product, loading, error } = useAppSelector((state) => state.products)
+  const { product, productLoading, productError } = useAppSelector(
+    (state) => state.products
+  )
   const { wishlist } = useAppSelector((state) => state.wishlist)
   const [quantity, setQuantity] = useState(variantId ? variantId.quantity : 1)
   const [openDialog, setOpenDialog] = useState(false)
@@ -62,7 +64,7 @@ const ProductDetailPage = () => {
     }
   }, [product, selectedVariant])
 
-  if (loading) {
+  if (productLoading) {
     return (
       <div className='fixed z-50 left-1/2 top-1/2 transform -translate-1/2 '>
         <DotLoader color='#1565C0' size={50} />
@@ -70,8 +72,8 @@ const ProductDetailPage = () => {
     )
   }
 
-  if (error) {
-    return <ErrorPage error={error} />
+  if (productError) {
+    return <ErrorPage error={productError} />
   }
 
   const handleAddCart = async () => {
@@ -84,8 +86,7 @@ const ProductDetailPage = () => {
         status: 'pending',
         orderDate: new Date(),
       }
-      console.log('newCart', newCart)
-      console.log('variantId', variantId)
+
       if (variantId) {
         await dispatch(
           updateCart({
@@ -116,9 +117,7 @@ const ProductDetailPage = () => {
   }
 
   const rating: number = 2.1
-  console.log('selected', selectedVariant)
-  console.log(product)
-  console.log(user?.uid)
+
   return (
     <React.Fragment>
       <div className='flex flex-col md:flex-row justify-between md:h-[calc(100vh-96px)] w-full max-w-[1200px] mx-auto'>

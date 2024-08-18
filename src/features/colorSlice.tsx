@@ -4,8 +4,8 @@ import type { RootState } from '../app/store'
 
 interface IColorState {
   colors: IColor[]
-  loading: boolean
-  error: string | null
+  colorLoading: boolean
+  colorError: string | null
 }
 // Async thunk middleware for reading data
 export const readColors = createAsyncThunk<IColor[]>(
@@ -20,8 +20,8 @@ export const readColors = createAsyncThunk<IColor[]>(
 
 const initialState: IColorState = {
   colors: [],
-  loading: false,
-  error: null,
+  colorLoading: false,
+  colorError: null,
 }
 
 const colorSlice = createSlice({
@@ -35,19 +35,19 @@ const colorSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(readColors.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.colorLoading = true
+        state.colorError = null
       })
       .addCase(
         readColors.fulfilled,
         (state, action: PayloadAction<IColor[]>) => {
-          state.loading = false
+          state.colorLoading = false
           state.colors = action.payload
         }
       )
       .addCase(readColors.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Color read failed.'
+        state.colorLoading = false
+        state.colorError = action.error.message || 'Color read failed.'
       })
   },
 })

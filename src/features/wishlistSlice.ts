@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 interface IWishlistState {
   wishlist: IWishlist[]
   wishLoading: boolean
-  error: string | null
+  wishError: string | null
 }
 // Async thunk middleware for get
 export const readWishlist = createAsyncThunk<IWishlist[], string>(
@@ -40,7 +40,7 @@ export const deleteWishlist = createAsyncThunk<void, string>(
 const initialState: IWishlistState = {
   wishlist: [],
   wishLoading: false,
-  error: null,
+  wishError: null,
 }
 
 const wishlistSlice = createSlice({
@@ -55,7 +55,7 @@ const wishlistSlice = createSlice({
     builder
       .addCase(readWishlist.pending, (state) => {
         state.wishLoading = true
-        state.error = null
+        state.wishError = null
       })
       .addCase(
         readWishlist.fulfilled,
@@ -66,29 +66,29 @@ const wishlistSlice = createSlice({
       )
       .addCase(readWishlist.rejected, (state, action) => {
         state.wishLoading = false
-        state.error = action.error.message || 'Wishlist read failed.'
+        state.wishError = action.error.message || 'Wishlist read failed.'
       })
       .addCase(createWishlist.pending, (state) => {
         state.wishLoading = true
-        state.error = null
+        state.wishError = null
       })
       .addCase(createWishlist.fulfilled, (state) => {
         state.wishLoading = false
       })
       .addCase(createWishlist.rejected, (state, action) => {
         state.wishLoading = false
-        state.error = action.error.message || 'Wishlist creation failed.'
+        state.wishError = action.error.message || 'Wishlist creation failed.'
       })
       .addCase(deleteWishlist.pending, (state) => {
         state.wishLoading = true
-        state.error = null
+        state.wishError = null
       })
       .addCase(deleteWishlist.fulfilled, (state) => {
         state.wishLoading = false
       })
       .addCase(deleteWishlist.rejected, (state, action) => {
         state.wishLoading = false
-        state.error = action.error.message || 'Wishlist delete failed.'
+        state.wishError = action.error.message || 'Wishlist delete failed.'
       })
   },
 })

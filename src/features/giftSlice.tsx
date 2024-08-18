@@ -5,7 +5,7 @@ import type { RootState } from '../app/store'
 interface IGiftState {
   gifts: IGift[]
   giftLoading: boolean
-  error: string | null
+  giftError: string | null
 }
 // Async thunk middleware for reading data
 export const readGifts = createAsyncThunk<IGift[]>(
@@ -21,7 +21,7 @@ export const readGifts = createAsyncThunk<IGift[]>(
 const initialState: IGiftState = {
   gifts: [],
   giftLoading: false,
-  error: null,
+  giftError: null,
 }
 
 const giftSlice = createSlice({
@@ -36,7 +36,7 @@ const giftSlice = createSlice({
     builder
       .addCase(readGifts.pending, (state) => {
         state.giftLoading = true
-        state.error = null
+        state.giftError = null
       })
       .addCase(readGifts.fulfilled, (state, action: PayloadAction<IGift[]>) => {
         state.giftLoading = false
@@ -44,7 +44,7 @@ const giftSlice = createSlice({
       })
       .addCase(readGifts.rejected, (state, action) => {
         state.giftLoading = false
-        state.error = action.error.message || 'Gift read failed.'
+        state.giftError = action.error.message || 'Gift read failed.'
       })
   },
 })

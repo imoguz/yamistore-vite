@@ -10,7 +10,7 @@ const ErrorPage: React.FC<IError> = ({ error }) => {
   const navigate = useNavigate()
 
   return (
-    <div>
+    <div className='h-[calc(100vh-128px)] md:h-[calc(100vh-144px)]'>
       <div className='flex items-center gap-1 px-1 py-0.5 bg-red-500'>
         <MdErrorOutline className='text-white' />
         <p className='text-white'>Error</p>

@@ -34,23 +34,6 @@ const SignUp = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
-  const handleEmailRegister = async (values: ISignUpValues, resetForm: any) => {
-    try {
-      const { firstName, lastName, email, password } = values
-      const user = await registerWithEmail(email, password)
-      if (user) {
-        const displayName = `${firstName} ${lastName}`
-        await updateUserProfile(user, displayName, null)
-      }
-      resetForm()
-      navigate('/')
-    } catch (err: any) {
-      setError(
-        err?.message?.replace('Firebase:', '') ??
-          'Sorry, registration failed. Please try again later.'
-      )
-    }
-  }
   return (
     <div className='mx-auto border rounded-md max-w-[450px] text-gray-700 py-8 px-4 sm:px-8 my-7 overflow-hidden'>
       <div className='flex items-center justify-center gap-2 h-14 cursor-pointer'>
@@ -80,9 +63,26 @@ const SignUp = () => {
           confirmPassword: '',
         }}
         validationSchema={signUpSchema}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
-          handleEmailRegister(values, resetForm)
-          setSubmitting(false)
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          try {
+            const { firstName, lastName, email, password } = values
+            const user = await registerWithEmail(email, password)
+            if (user) {
+              const displayName = `${firstName} ${lastName}`
+              await updateUserProfile(user, displayName, null)
+            }
+            resetForm()
+            navigate('/')
+          } catch (err: unknown) {
+            if (err instanceof Error) {
+              setError(
+                err?.message?.replace('Firebase:', '') ??
+                  'Sorry, registration failed. Please try again later.'
+              )
+            }
+          } finally {
+            setSubmitting(false)
+          }
         }}
       >
         {({ values, handleBlur, isSubmitting }) => (

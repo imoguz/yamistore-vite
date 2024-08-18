@@ -5,12 +5,13 @@ import { useUser } from './../contexts/UserContext'
 import ErrorPage from './ErrorPage'
 import CheckoutCard from '../components/checkout/CheckoutCard'
 import { useNavigate } from 'react-router-dom'
+import DotLoader from 'react-spinners/DotLoader'
 
 const Checkout = () => {
   const [totalPrice, setTotalPrice] = useState(0)
   const [totalDiscount, setTotalDiscount] = useState(0)
   const [promoCode, setPromoCode] = useState('')
-  const { cart, error } = useAppSelector((state) => state.cart)
+  const { cart, cartLoading, cartError } = useAppSelector((state) => state.cart)
   const { user } = useUser()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -40,19 +41,28 @@ const Checkout = () => {
     }
   }, [cart])
 
-  if (error) {
-    return <ErrorPage error={error} />
-  }
   const handlePromoSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     // will be added promo code function
     event.preventDefault()
-    const trimmedValue = promoCode.trim()
-    console.log(trimmedValue)
+    console.log(promoCode.trim())
   }
+
+  if (cartLoading) {
+    return (
+      <div className='fixed z-50 left-1/2 top-1/2 transform -translate-1/2 '>
+        <DotLoader color='#1565C0' size={50} />
+      </div>
+    )
+  }
+
+  if (cartError) {
+    return <ErrorPage error={cartError} />
+  }
+
   return (
     <>
       {cart.length > 0 ? (
-        <div className='flex flex-col lg:flex-row justify-center mx-auto items-center lg:items-start min-h-[calc(100vh-128px)] w-full max-w-[1236px] px-2 my-3 gap-5'>
+        <div className='flex flex-col lg:flex-row justify-center mx-auto items-center lg:items-start min-h-[calc(100vh-128px)] w-full max-w-[1236px] px-2 my-3 gap-7'>
           {/* left column card items */}
           <div className='w-max-[800px] order-2 lg:order-1'>
             <div className='flex justify-between w-full text-xl font-semibold my-2 px-1'>

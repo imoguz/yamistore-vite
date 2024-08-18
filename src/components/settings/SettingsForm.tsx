@@ -4,7 +4,7 @@ import { MdEdit } from 'react-icons/md'
 import { RxCross1 } from 'react-icons/rx'
 import { IoMdEye } from 'react-icons/io'
 import { IoMdEyeOff } from 'react-icons/io'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik'
 import { User } from 'firebase/auth'
 
 interface ISettingsFormProps {
@@ -33,7 +33,9 @@ const SettingsForm: React.FC<ISettingsFormProps> = ({ user, formField }) => {
       ? { currentPassword: '', newPassword: '', confirmPassword: '' }
       : { [formField.fieldName]: formField.initialValue }
 
-  const handleCancelClick = (resetForm: any) => {
+  const handleCancelClick = (
+    resetForm: FormikHelpers<typeof initialValues>['resetForm']
+  ) => {
     resetForm({ values: initialValues })
     setEdit(false)
   }

@@ -7,7 +7,6 @@ import { signInSchema } from '../helpers/validationSchemas'
 import { signInWithGoogle, signInWithEmail } from '../firebase/auth'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-
 const SignIn = () => {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
@@ -30,24 +29,13 @@ const SignIn = () => {
     try {
       await signInWithGoogle()
       navigate('/')
-    } catch (err: any) {
-      setError(
-        err?.message?.replace('Firebase:', '') ??
-          'Sorry, sign-in failed. Please try again later.'
-      )
-    }
-  }
-
-  const handleEmailSignIn = async (values: ISignInValues, resetForm: any) => {
-    try {
-      await signInWithEmail(values.email, values.password)
-      resetForm()
-      navigate('/')
-    } catch (err: any) {
-      setError(
-        err?.message?.replace('Firebase:', '') ??
-          'Sorry, sign-in failed. Please try again later.'
-      )
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(
+          err?.message?.replace('Firebase:', '') ??
+            'Sorry, sign-in failed. Please try again later.'
+        )
+      }
     }
   }
 
@@ -77,9 +65,21 @@ const SignIn = () => {
           password: '',
         }}
         validationSchema={signInSchema}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
-          handleEmailSignIn(values, resetForm)
-          setSubmitting(false)
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          try {
+            await signInWithEmail(values.email, values.password)
+            resetForm()
+            navigate('/')
+          } catch (err: unknown) {
+            if (err instanceof Error) {
+              setError(
+                err?.message?.replace('Firebase:', '') ??
+                  'Sorry, sign-in failed. Please try again later.'
+              )
+            }
+          } finally {
+            setSubmitting(false)
+          }
         }}
       >
         {({ values, handleBlur, isSubmitting }) => (

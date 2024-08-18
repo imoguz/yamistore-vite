@@ -3,8 +3,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 
 interface ICartState {
   cart: ICart[]
-  loading: boolean
-  error: string | null
+  cartLoading: boolean
+  cartError: string | null
 }
 
 // thunk middleware for get
@@ -51,8 +51,8 @@ export const deleteCart = createAsyncThunk<void, string>(
 
 const initialState: ICartState = {
   cart: [],
-  loading: false,
-  error: null,
+  cartLoading: false,
+  cartError: null,
 }
 
 const cartSlice = createSlice({
@@ -66,49 +66,49 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(readCart.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.cartLoading = true
+        state.cartError = null
       })
       .addCase(readCart.fulfilled, (state, action: PayloadAction<ICart[]>) => {
-        state.loading = false
+        state.cartLoading = false
         state.cart = action.payload
       })
       .addCase(readCart.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Cart read failed.'
+        state.cartLoading = false
+        state.cartError = action.error.message || 'Cart read failed.'
       })
       .addCase(createCart.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.cartLoading = true
+        state.cartError = null
       })
       .addCase(createCart.fulfilled, (state) => {
-        state.loading = false
+        state.cartLoading = false
       })
       .addCase(createCart.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Cart creation failed.'
+        state.cartLoading = false
+        state.cartError = action.error.message || 'Cart creation failed.'
       })
       .addCase(updateCart.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.cartLoading = true
+        state.cartError = null
       })
       .addCase(updateCart.fulfilled, (state) => {
-        state.loading = false
+        state.cartLoading = false
       })
       .addCase(updateCart.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Cart update failed.'
+        state.cartLoading = false
+        state.cartError = action.error.message || 'Cart update failed.'
       })
       .addCase(deleteCart.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.cartLoading = true
+        state.cartError = null
       })
       .addCase(deleteCart.fulfilled, (state) => {
-        state.loading = false
+        state.cartLoading = false
       })
       .addCase(deleteCart.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Cart deletion failed.'
+        state.cartLoading = false
+        state.cartError = action.error.message || 'Cart deletion failed.'
       })
   },
 })

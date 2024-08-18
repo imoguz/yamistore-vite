@@ -24,7 +24,7 @@ const CheckoutCard: React.FC<ICheckoutCardProps> = ({ item, user }) => {
   const [quantity, setQuantity] = useState<number>(item.quantity)
   const [currentItemID, setCurrentItemID] = useState<null | string>(null)
   const [deletedItem, setDeletedItem] = React.useState<string | null>(null)
-  const { loading, error } = useAppSelector((state) => state.cart)
+  const { cartLoading, cartError } = useAppSelector((state) => state.cart)
   const imageURL = `${import.meta.env.VITE_CLOUDINARY_BASE_URL}`
   const discount =
     item.product_id.discount.type === 'monetary'
@@ -59,20 +59,20 @@ const CheckoutCard: React.FC<ICheckoutCardProps> = ({ item, user }) => {
     }
     setCurrentItemID(null)
   }
-  console.log(item)
+
   const handleDeleteCartItem = async () => {
     setDeletedItem(item._id)
     await dispatch(deleteCart(item._id))
     await dispatch(readCart(item.user_id))
   }
 
-  if (error) {
-    return <ErrorPage error={error} />
+  if (cartError) {
+    return <ErrorPage error={cartError} />
   }
 
   return (
     <div className='flex flex-col sm:flex-row w-full h-min-[160px] p-0.5 bg-white border border-gray-100 rounded shadow-md shadow-gray-400 hover:shadow-red-500'>
-      {loading && deletedItem === item._id && (
+      {cartLoading && deletedItem === item._id && (
         <div className='fixed z-50 left-1/2 top-1/2 transform -translate-1/2 '>
           <DotLoader color='#1565C0' size={50} />
         </div>
@@ -140,8 +140,8 @@ const CheckoutCard: React.FC<ICheckoutCardProps> = ({ item, user }) => {
         </div>
       </div>
 
-      <div className='w-full sm:w-[130px] h-full flex flex-row sm:flex-col justify-between'>
-        <div className='flex justify-around items-center text-xl'>
+      <div className='w-full sm:w-[130px] flex flex-row sm:flex-col mt-2 sm:mt-0 items-center justify-between'>
+        <div className='flex justify-between items-center w-1/3 sm:w-full text-xl'>
           <button
             type='button'
             onClick={handleDeleteCartItem}
@@ -149,7 +149,6 @@ const CheckoutCard: React.FC<ICheckoutCardProps> = ({ item, user }) => {
           >
             <MdDeleteOutline className='text-orange-700' />
           </button>
-
           <button
             type='button'
             className='relative flex justify-center items-center w-9 h-9 rounded-full hover:bg-gray-200 transition-colors duration-300'
@@ -168,7 +167,6 @@ const CheckoutCard: React.FC<ICheckoutCardProps> = ({ item, user }) => {
           >
             <MdEdit className='text-blue-500' />
           </button>
-
           <button
             type='button'
             className='relative flex justify-center items-center w-9 h-9 rounded-full hover:bg-gray-200 transition-colors duration-300'
@@ -187,7 +185,7 @@ const CheckoutCard: React.FC<ICheckoutCardProps> = ({ item, user }) => {
             )}
           </button>
         </div>
-        <div className='px-3 sm:px-0 text-lg mb-2 text-center'>
+        <div className='px-3 sm:px-0 text-lg mb-2 w-2/3 sm:w-full text-end sm:text-center'>
           <p>Item Total</p>
           <span>
             ${((item.product_id.price - discount) * quantity).toFixed(2)}

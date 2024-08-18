@@ -13,7 +13,7 @@ interface IWishlistCardProps {
 }
 const WishlistCard: React.FC<IWishlistCardProps> = ({ item, user }) => {
   const dispatch = useAppDispatch()
-  const { wishLoading, error } = useAppSelector((state) => state.wishlist)
+  const { wishLoading, wishError } = useAppSelector((state) => state.wishlist)
   const navigate = useNavigate()
 
   const defaultVariant = item.product_id.variants.find(
@@ -34,8 +34,8 @@ const WishlistCard: React.FC<IWishlistCardProps> = ({ item, user }) => {
   const mainImages = item.product_id.images?.find((image) => image.isMainImage)
   const imageURL = `${import.meta.env.VITE_CLOUDINARY_BASE_URL}`
 
-  if (error) {
-    return <ErrorPage error={error} />
+  if (wishError) {
+    return <ErrorPage error={wishError} />
   }
 
   return (

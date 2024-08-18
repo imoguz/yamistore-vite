@@ -4,8 +4,8 @@ import type { RootState } from '../app/store'
 
 interface IBannerState {
   banners: IBanner[]
-  loading: boolean
-  error: string | null
+  bannerLoading: boolean
+  bannerError: string | null
 }
 // Async thunk middleware for reading data
 export const readBanners = createAsyncThunk<IBanner[]>(
@@ -20,8 +20,8 @@ export const readBanners = createAsyncThunk<IBanner[]>(
 
 const initialState: IBannerState = {
   banners: [],
-  loading: false,
-  error: null,
+  bannerLoading: false,
+  bannerError: null,
 }
 
 const bannerSlice = createSlice({
@@ -35,19 +35,19 @@ const bannerSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(readBanners.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.bannerLoading = true
+        state.bannerError = null
       })
       .addCase(
         readBanners.fulfilled,
         (state, action: PayloadAction<IBanner[]>) => {
-          state.loading = false
+          state.bannerLoading = false
           state.banners = action.payload
         }
       )
       .addCase(readBanners.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'banner read failed.'
+        state.bannerLoading = false
+        state.bannerError = action.error.message || 'banner read failed.'
       })
   },
 })

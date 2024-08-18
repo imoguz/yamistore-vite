@@ -43,7 +43,9 @@ const ProductListingPage = () => {
   const [tempFilters, setTempFilters] =
     useState<ISelectedFilters>(initialFilters)
   const [productData, setProductData] = useState<IProductData | null>(null)
-  const { loading, error } = useAppSelector((state) => state.products)
+  const { productLoading, productError } = useAppSelector(
+    (state) => state.products
+  )
 
   const [topcategory, midcategory, ...remaining] = category
     ? category.split('-')
@@ -130,8 +132,8 @@ const ProductListingPage = () => {
     setTempFilters(initialFilters)
   }
 
-  if (error) {
-    return <ErrorPage error={error} />
+  if (productError) {
+    return <ErrorPage error={productError} />
   }
 
   return (
@@ -198,7 +200,7 @@ const ProductListingPage = () => {
           </div>
         </div>
         <div className='flex flex-wrap justify-between gap-y-7 gap-x-1'>
-          {loading ? (
+          {productLoading ? (
             <LoadingSkeleton />
           ) : (
             productData &&

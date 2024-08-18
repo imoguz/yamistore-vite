@@ -19,7 +19,6 @@ export const handleEmailRegister = async (values: {
     const { email, password, firstName, lastName } = values
     const user = await registerWithEmail(email, password)
     if (user) {
-      console.log(user)
       // After registering, add the displayName using update operation.
       const displayName = `${firstName} ${lastName}`
       await updateUserProfile(user, displayName, null)

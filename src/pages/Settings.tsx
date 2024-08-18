@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import SettingsForm from '../components/settings/SettingsForm'
 import { useUser } from '../contexts/UserContext'
 import { MdErrorOutline } from 'react-icons/md'
 import { settingsSchema } from '../helpers/validationSchemas'
 import { handleUpdateUserProfile } from '../firebase/utils'
+import SettingsForm from '../components/settings/SettingsForm'
 
 const Settings = () => {
   const { user } = useUser()

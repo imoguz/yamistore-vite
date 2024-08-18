@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { ScrollToTop } from '../helpers/ScrollToTop'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import Profile from '../pages/Profile'
@@ -10,7 +11,6 @@ import ProductListingPage from '../pages/ProductListingPage'
 import ProductDetailPage from '../pages/ProductDetailPage'
 import Checkout from '../pages/Checkout'
 import Wishlist from '../pages/Wishlist'
-import { ScrollToTop } from '../helpers/ScrollToTop'
 
 const Router = () => {
   return (
